@@ -91,6 +91,13 @@ def test_eq(a: float) -> None:
     assert eq(a, a + 1.0) == 0.0
 
 
+@pytest.mark.task0_1
+def test_inv_back() -> None:
+    x = 0.5
+    d = 2.0
+    assert inv_back(x, d) == -8.0
+
+
 # ## Task 0.2 - Property Testing
 
 # Implement the following property checks
