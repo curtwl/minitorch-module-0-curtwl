@@ -32,12 +32,25 @@ class Module:
     def train(self) -> None:
         "Set the mode of this module and all descendent modules to `train`."
         # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        self.__setattr__('mode', 'train')
+        self.training = True
+        children = self.modules()
+
+        while children:
+            child = children.pop()                        
+            child.train()
+            
 
     def eval(self) -> None:
         "Set the mode of this module and all descendent modules to `eval`."
         # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        self.__setattr__('mode', 'eval') 
+        self.training = False
+        children = self.modules()
+        
+        while children:
+            child = children.pop()
+            child.eval()
 
     def named_parameters(self) -> Sequence[Tuple[str, Parameter]]:
         """
@@ -48,12 +61,32 @@ class Module:
             The name and `Parameter` of each ancestor parameter.
         """
         # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        p: Dict[str, Parameter] = self.__dict__["_parameters"]
+        children = list(self._modules.items()) #
+        params = list(tuple(p.items()))
+        # self.marked = True
+
+        while children:
+            child = children.pop()
+            params += [(child[0] + '.' + submodule_name, submodule) for submodule_name, submodule in child[1].named_parameters()]
+            # params.append(((child[0] + '.' + submodule_name, submodule) for (submodule_name, submodule) in child[1].named_parameters()))
+            # if not child.marked:
+            #     params.append(([child.name.join(child.named_parameters())))
+                 
+            # if child._modules:
+            #     children.append(child.modules())
+            # p: Dict[str, Parameter] = child.__dict__["_parameters"]
+            # params.append(tuple(x) for x in p)
+            
+        # print(params)
+        return params
 
     def parameters(self) -> Sequence[Parameter]:
         "Enumerate over all the parameters of this module and its descendents."
-        # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        # TODO: Implement for Task 0.4[1]
+        # print([param for param in self.named_parameters()])
+        # return [(param for param in self.named_parameters())]
+        return self.named_parameters()
 
     def add_parameter(self, k: str, v: Any) -> Parameter:
         """
@@ -124,7 +157,7 @@ class Parameter:
     It is designed to hold a :class:`Variable`, but we allow it to hold
     any value for testing.
     """
-
+    # restore `x: Module` to `x: Any` for tests
     def __init__(self, x: Any, name: Optional[str] = None) -> None:
         self.value = x
         self.name = name
