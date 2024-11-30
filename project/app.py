@@ -1,3 +1,8 @@
+import sys
+sys.path.append('/usr/local/lib/python3.10/dist-packages/minitorch')
+
+
+
 from argparse import ArgumentParser
 
 import streamlit as st

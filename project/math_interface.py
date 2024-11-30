@@ -5,7 +5,7 @@ import streamlit as st
 from interface.streamlit_utils import render_function
 
 import minitorch
-from minitorch import MathTest, MathTestVariable
+from minitorch.testing import MathTest, MathTestVariable
 
 MyModule = None
 minitorch
